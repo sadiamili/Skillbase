@@ -1,0 +1,58 @@
+{% extends "courses/course_base.html" %}
+<!-- we want everything to occure before the course name  -->
+{% block precourse %}
+
+<!-- shows the course name -->
+<h1>{{course.name}}</h1>
+<!-- counts the number likes in a specific course -->
+<!-- calling the built in count method -->
+<h2> Like Count: {{course.likes.count}}</h2>
+
+  <div class="content">
+
+      <!-- allows users to like and unlike a course -->
+				{% if user in course.likes.all %}
+					<a href="{% url 'courses:leave' slug=course.slug %}" class="btn btn-lg btn-fill btn-warning"><span class="glyphicon glyphicon-remove-circle"></span> Unlike</a>
+				{% else %}
+					<a href="{% url 'courses:like' slug=course.slug %}" class="btn btn-lg btn-fill btn-warning"><span class="glyphicon glyphicon-ok-circle"></span> Like</a>
+				{% endif %}
+    <div style="padding-top: 32px"></div>
+    {% for comment in comments %}
+        <div class="row">
+            <div class="col-lg-2">
+                {{ comment.body }}
+                <p>by {{ comment.user }}</p>
+            </div>
+        </div>
+    {% endfor %}
+    <br>
+  {% if user.is_authenticated %}
+    <form method="post">{% csrf_token %}
+        <label for="comment">Post a  comment</label>
+        <textarea required id="comment" name="comment" style="color: black; width: 506px; height: 197px" class="form-control" cols="50"></textarea>
+        <input type="submit" value="Submit" class="btn btn-primary">
+    </form>
+  {% endif %}
+
+</div>
+
+{% endblock %}
+
+
+{% block course_content %}
+
+<div class="col-md-8">
+  <!-- if there's no posts yet, it will show the h2 message -->
+	{% if course.posts.count == 0 %}
+	<h2>No posts in this course yet!</h2>
+
+	{% else %}
+    <!-- it will display the posts -->
+		{% for post in course.posts.all %}
+      <!-- include is similar to extends -->
+			{% include "posts/_post.html" %}
+		{% endfor %}
+
+	{% endif %}
+</div>
+{% endblock %}

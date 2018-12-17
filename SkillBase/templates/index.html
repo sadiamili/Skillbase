@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load user-info %}
+{% block content %}
+
+    <h1>Welcome to Skill Base!</h1>
+    <h2>The best place to showcase all your skills!</h2>
+    <h2>Login or Sign-up for free to get started!</h2>
+    <br>
+
+
+    <h4>Active Users</h4>
+    <ul class="list-unstyled">
+        {% for user in users %}
+            {% if user == request.user %}
+            {% else %}
+                <li><a href="/user/{{ user }}/">{{ user }}</a></li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "internships/internship_base.html" %}
+{% load bootstrap3 %}
+
+{% block internship_content %}
+<h4>Add A New Internship</h4>
+  <form method="POST" action="{% url 'internships:create' %}" id="internshipForm">
+  	{% csrf_token %}
+  	{% bootstrap_form form %}
+  	<input type="submit" value="Create" class="btn btn-primary btn-large">
+  </form>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+  <script>
+    $(document).ready(function () {
+       $('.datepicker').datepicker({
+            format: "yyyy-mm-dd",
+        });
+        $("#id_start").attr("type", "date");
+        $("#id_end").attr("type", "date");
+        $(".datepicker").click(function () {
+            $(".datepicker-days").css("color","black")
+        })
+    })
+  </script>
+{% endblock %}

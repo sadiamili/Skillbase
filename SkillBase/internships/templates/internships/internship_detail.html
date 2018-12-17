@@ -1,0 +1,55 @@
+{% extends "internships/internship_base.html" %}
+
+{% block preinternship %}
+
+
+<h1>{{internship.name}}</h1>
+<h2> Like Count: {{internship.likes.count}}</h2>
+
+  <div class="content">
+
+
+				{% if user in internship.likes.all %}
+					<a href="{% url 'internships:leave' slug=internship.slug %}" class="btn btn-lg btn-fill btn-warning"><span class="glyphicon glyphicon-remove-circle"></span> Unlike</a>
+				{% else %}
+					<a href="{% url 'internships:like' slug=internship.slug %}" class="btn btn-lg btn-fill btn-warning"><span class="glyphicon glyphicon-ok-circle"></span> Like</a>
+				{% endif %}
+
+    <div style="padding-top: 32px"></div>
+    {% for comment in comments %}
+        <div class="row">
+            <div class="col-lg-2">
+                {{ comment.body }}
+                <p>by {{ comment.user }}</p>
+            </div>
+        </div>
+    {% endfor %}
+    <br>
+  {% if user.is_authenticated %}
+    <form method="post">{% csrf_token %}
+        <label for="comment">Post a  comment</label>
+        <textarea required id="comment" name="comment" style="color: black; width: 506px; height: 197px" class="form-control" cols="50"></textarea>
+        <input type="submit" value="Submit" class="btn btn-primary">
+    </form>
+  {% endif %}
+
+</div>
+
+{% endblock %}
+
+
+{% block internship_content %}
+
+<div class="col-md-8">
+	{% if internship.posts.count == 0 %}
+	<h2>No posts in this internship yet!</h2>
+
+	{% else %}
+
+		{% for post in internship.posts.all %}
+			{% include "posts/_post.html" %}
+		{% endfor %}
+
+	{% endif %}
+</div>
+{% endblock %}

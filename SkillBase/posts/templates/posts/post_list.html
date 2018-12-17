@@ -1,0 +1,47 @@
+{% extends "posts/post_base.html" %}
+{% load humanize %}
+
+{% block pre_post_content %}
+<div class="col-md-4">
+	<!-- check if user is authenticated -->
+	{% if request.user.is_authenticated %}
+	<div class="card card-with-shadow">
+		<div class="content">
+			<!-- lists out all courses  -->
+			<h5 class="title">Your Courses</h5>
+			<ul class="list-unstyled">
+				{# {% get_user_courses as user_courses %}#}
+				{% for like_course in get_user_courses %}
+				<li class="course li-with-bullet">
+					<a href="{% url 'courses:single' slug=like_course.course.slug %}">{{ like_course.course.name }}</a>
+				</li>
+				{% endfor %}
+
+			</ul>
+		</div>
+	</div>
+	{% endif %}
+	<div class="card card-with-shadow">
+		<div class="content">
+			<h5 class="title">All courses</h5>
+			<ul class="list-unstyled">
+				{# {% get_other_courses as other_courses %}#}
+				{% for other_course in get_other_courses %}
+					<li class="course li-with-bullet"><a href="{% url 'courses:single' slug=other_course.slug %}">{{ other_course.name }}</a></li>
+				{% endfor %}
+			</ul>
+
+
+
+
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block post_content %}
+<div class="col-md-8">
+	{% for post in post_list %}
+  {% include "posts/_post.html" %}
+	{% endfor %}
+</div>
+{% endblock %}

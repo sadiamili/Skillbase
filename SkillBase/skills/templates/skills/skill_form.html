@@ -1,0 +1,11 @@
+{% extends "skills/skill_base.html" %}
+{% load bootstrap3 %}
+
+{% block skill_content %}
+<h4>Add A New Skill</h4>
+  <form method="POST" action="{% url 'skills:create' %}" id="skillForm">
+  	{% csrf_token %}
+  	{% bootstrap_form form %}
+  	<input type="submit" value="Create" class="btn btn-primary btn-large">
+  </form>
+{% endblock %}

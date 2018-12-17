@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+    <ul id="myTab" class="nav nav-tabs">
+        <li class="active"> <a href="#home" data-toggle="tab">Courses</a> </li>
+        <li><a href="#internship" data-toggle="tab">Internships</a></li>
+        <li><a href="#skills" data-toggle="tab">Skills</a></li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade in active" id="home">
+            {% for course in courses %}
+		  <a class="list-course-item" href="{% url 'courses:single' slug=course.slug %}">
+				<!-- link to the course name.Upon clicked on it, it will take user to a page showing details of the course -->
+			     <h3 class="title list-course-item-heading">{{ course.name }}</h3>
+			<div class="list-course-item-text container-fluid">
+				<!-- displays description -->
+				<!-- safe helps not display html tags -->
+				{{ course.description_html|safe }}
+				<h6>Professor's name: {{ course.professor_name|safe }}</h6>
+				<h6>Grade: {{ course.grade|safe }}</h6>
+				<h6>Course semester and year: {{ course.semester|safe }}</h6>
+				<!-- {{ course.professor_name|safe }} -->
+				<!-- {{ course.grade|safe }} -->
+			</div>
+		</a>
+		{% endfor %}
+        </div>
+        <div class="tab-pane fade" id="internship">
+            {% for internship in internships %}
+		  <a class="list-internship-item" href="{% url 'internships:single' slug=internship.slug %}">
+			     <h3 class="title list-internship-item-heading">{{ internship.name }}</h3>
+			<div class="list-internship-item-text container-fluid">
+				<h6>Company name: {{ internship.company|safe }}</h6>
+				{{ internship.description_html|safe }}
+                <br>
+                <span>Start date: {{ internship.start }}</span><span style="padding-left: 20px">End date: {{ internship.end }}</span>
+			</div>
+		</a>
+		{% endfor %}
+        </div>
+        <div class="tab-pane fade" id="skills">
+            {% for skill in skills %}
+		  <a class="list-skill-item" href="{% url 'skills:single' slug=skill.slug %}">
+			     <h3 class="title list-skill-item-heading">{{ skill.name }}</h3>
+			<div class="list-skill-item-text container-fluid">
+				{{ skill.description_html|safe }}
+                <br>
+				<span>Level of proficiency: {{ skill.level|capfirst }}</span>
+			</div>
+           {% endfor %}
+                </a>
+        </div>
+    </div>
+{% endblock %}

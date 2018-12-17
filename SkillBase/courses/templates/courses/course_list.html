@@ -1,0 +1,64 @@
+{% extends "courses/course_base.html" %}
+{% load course_info %}
+{% block precourse %}
+<div class="col-md-4">
+	<div class="content">
+		<!-- if a user is logged in and they're authenticated, show the welcome message -->
+		{% if user.is_authenticated %}
+		<h2>
+			Welcome back
+			<!-- links to user's actual profile and it will have list of all their posts that will be diplayed-->
+			<a href="{% url 'posts:for_user' username=user.username %}">@{{user.username }}</a>
+		</h2>
+
+    {% endif %}
+			<h2>Courses</h2>
+
+			<p>Welcome to the Courses Page! Add your courses here!</p>
+	</div>
+	<!-- if the user is authenticated, they will be allowed to add new courses -->
+	{% if user.is_authenticated %}
+	<a href="{% url 'courses:create' %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> Add New Course!</a>
+	{% endif %}
+</div>
+{% endblock %}
+
+<!-- displays list of all the courses -->
+{% block course_content %}
+<div class="col-md-8">
+	<div class="list-course">
+		{% for course in object_list %}
+            {% if course.user == request.user %}
+		  <a class="list-course-item" href="{% url 'courses:single' slug=course.slug %}">
+				<!-- link to the course name.Upon clicked on it, it will take user to a page showing details of the course -->
+			     <h3 class="title list-course-item-heading">{{ course.name }}</h3>
+			<div class="list-course-item-text container-fluid">
+				<!-- displays description -->
+				<!-- safe helps not display html tags -->
+				{{ course.description_html|safe }}
+				<h6>Professor's name: {{ course.professor_name|safe }}</h6>
+				<h6>Grade: {{ course.grade|safe }}</h6>
+				<h6>Course semester and year: {{ course.semester|safe }}</h6>
+				<!-- {{ course.professor_name|safe }} -->
+				<!-- {{ course.grade|safe }} -->
+				<div class="row">
+					<div class="col-md-2">
+						<!-- displays number of likes -->
+						<span class="badge">{{ course.likes.count }}</span> like{{ course.likes.count|pluralize }}
+					</div>
+                    <div class="col-md-3">
+						<!-- displays number of likes -->
+						<span class="badge">{{ course.id|comments }}</span> comment{{ course.id|comments|pluralize }}
+					</div>
+					<div class="col-md-2">
+						<!-- display number of posts -->
+						<span class="badge">{{ course.posts.count }}</span> post{{ course.posts.count|pluralize }}
+					</div>
+				</div>
+			</div>
+		</a>
+            {% endif %}
+		{% endfor %}
+	</div>
+</div>
+{% endblock %}
